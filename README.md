@@ -1,9 +1,9 @@
-[Thomas Jakway, tjakway]:
+[Thomas Jakway (tjakway)]:
 [MarcWeber/hasktags] seems to be unmaintained, so I created this repository to merge outstanding pull requests and be up to date.
 
 ----------------------------------------------
 
-[Mark Weber, MarcWeber]:
+[Mark Weber (MarcWeber)]:
 
 hasktags: a tool to generate tag files for vim and emacs
 
@@ -83,5 +83,5 @@ and probably much more
 
 
 [Thomas Jakway (tjakway)]: https://github.com/tjakway/hasktags
-[Mark Weber (MarcWeber)]: https://github.com/MarcWeber/hasktags
+[MarkWeber/hasktags]: https://github.com/MarcWeber/hasktags
 [Mark Weber (MarcWeber)]: https://github.com/MarcWeber/hasktags
