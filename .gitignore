@@ -8,3 +8,5 @@ cabal-dev
 Setup
 TAGS
 tags
+.cabal-sandbox
+cabal.sandbox.config
