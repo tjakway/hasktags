@@ -29,6 +29,7 @@ import Data.Maybe
 
 import System.IO
 import System.Directory
+import System.FilePath (takeFileName)
 import Text.JSON.Generic
 import Control.Monad
 
@@ -119,6 +120,7 @@ data Mode = ExtendedCtag
           | Help
           | HsSuffixes [String]
           | AbsolutePath
+          | FileTags
           deriving (Ord, Eq, Show)
 
 data Token = Token String Pos
@@ -149,7 +151,8 @@ generate modes filenames = do
                      then AppendMode
                      else WriteMode
   filedata <- mapM (findWithCache (CacheFiles `elem` modes)
-                                  (IgnoreCloseImpl `elem` modes))
+                                  (IgnoreCloseImpl `elem` modes)
+                                  (FileTags `elem` modes))
                    filenames
 
   when (mode == CTags)
@@ -172,10 +175,16 @@ generate modes filenames = do
            hClose etagsfile
            hClose ctagsfile)
 
+-- Append file name in the list of tags per file
+appendFileTag :: FileData -> FileData
+appendFileTag (FileData filename things) = FileData filename (tag:things)
+  where tag = FoundThing FTFileName (takeFileName filename) pos
+        pos = Pos filename 0 0 ""
+
 -- Find the definitions in a file, or load from cache if the file
 -- hasn't changed since last time.
-findWithCache :: Bool -> Bool -> FileName -> IO FileData
-findWithCache cache ignoreCloseImpl filename = do
+findWithCache :: Bool -> Bool -> Bool -> FileName -> IO FileData
+findWithCache cache ignoreCloseImpl fileTags filename = do
   cacheExists <- if cache then doesFileExist cacheFilename else return False
   if cacheExists
      then do fileModified <- getModificationTime filename
@@ -190,8 +199,9 @@ findWithCache cache ignoreCloseImpl filename = do
         filenameToTagsName = (++"tags") . reverse . dropWhile (/='.') . reverse
         findAndCache = do
           filedata <- findThings ignoreCloseImpl filename
-          when cache (writeFile cacheFilename (encodeJSON filedata))
-          return filedata
+          let alldata = if fileTags then appendFileTag filedata else filedata
+          when cache (writeFile cacheFilename (encodeJSON alldata))
+          return alldata
 
 -- eg Data.Text says that using ByteStrings could be fastest depending on ghc
 -- platform and whatnot - so let's keep the hacky BS.readFile >>= BS.unpack
