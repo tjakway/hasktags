@@ -121,6 +121,7 @@ data Mode = ExtendedCtag
           | HsSuffixes [String]
           | AbsolutePath
           | FileTags
+          | IncludeHidden
           deriving (Ord, Eq, Show)
 
 data Token = Token String Pos
@@ -496,9 +497,9 @@ fromLiterate file lns =
         returnCode [] = [] -- unexpected - hasktags does tagging, not compiling, thus don't treat missing \end{code} to be an error
 
 -- suffixes: [".hs",".lhs"], use "" to match all files
-dirToFiles :: Bool -> [String] -> FilePath -> IO [ FilePath ]
-dirToFiles _ _ "STDIN" = fmap lines $ hGetContents stdin
-dirToFiles followSyms suffixes p = do
+dirToFiles :: Bool -> Bool -> [String] -> FilePath -> IO [ FilePath ]
+dirToFiles _ _ _ "STDIN" = fmap lines $ hGetContents stdin
+dirToFiles followSyms includeHidden suffixes p = do
   isD <- doesDirectoryExist p
   isSymLink <-
 #ifdef VERSION_unix
@@ -512,7 +513,9 @@ dirToFiles followSyms suffixes p = do
       if isSymLink && not followSyms
         then return []
         else do
-          -- filter . .. and hidden files .*
-          contents <- filter ((/=) '.' . head) `fmap` getDirectoryContents p
-          concat `fmap` (mapM (dirToFiles followSyms suffixes . (</>) p) contents)
+          -- filter . .. optionally also hidden files .*
+          let excludeDirectorySpecial item | includeHidden = notElem item [".", ".."]
+                                           | otherwise     = (/=) '.' $ head item
+          contents <- filter excludeDirectorySpecial `fmap` getDirectoryContents p
+          concat `fmap` (mapM (dirToFiles followSyms includeHidden suffixes . (</>) p) contents)
   where matchingSuffix = any (`isSuffixOf` p) suffixes
