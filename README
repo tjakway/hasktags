@@ -1,3 +1,9 @@
+[Thomas Jakway (tjakway)](https://github.com/tjakway/hasktags):
+[MarcWeber/hasktags](https://github.com/MarcWeber/hasktags) seems to be unmaintained, so I created this repository to merge outstanding pull requests and be up to date.
+
+*******************************************************
+[Mark Weber (MarcWeber)](https://github.com/MarcWeber/hasktags):
+
 hasktags: a tool to generate tag files for vim and emacs
 
   What is it for? A tag file is a index containing key items of your project such as
