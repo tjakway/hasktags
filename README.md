@@ -3,7 +3,7 @@
 
 ----------------------------------------------
 
-[Mark Weber (MarcWeber)]:
+[Marc Weber (MarcWeber)]:
 
 hasktags: a tool to generate tag files for vim and emacs
 
@@ -83,5 +83,5 @@ and probably much more
 
 
 [Thomas Jakway (tjakway)]: https://github.com/tjakway/hasktags
-[MarkWeber/hasktags]: https://github.com/MarcWeber/hasktags
-[Mark Weber (MarcWeber)]: https://github.com/MarcWeber/hasktags
+[MarcWeber/hasktags]: https://github.com/MarcWeber/hasktags
+[Marc Weber (MarcWeber)]: https://github.com/MarcWeber/hasktags
