@@ -43,7 +43,7 @@ import System.Directory
       getDirectoryContents,
       doesFileExist,
       doesDirectoryExist,
-      isSymbolicLink )
+      pathIsSymbolicLink )
 import Text.JSON.Generic ( encodeJSON, decodeJSON )
 import Control.Monad ( when )
 import DebugShow ( trace_ )
@@ -509,7 +509,7 @@ dirToFiles :: Bool -> Bool -> [String] -> FilePath -> IO [ FilePath ]
 dirToFiles _ _ _ "STDIN" = fmap lines $ hGetContents stdin
 dirToFiles followSyms includeHidden suffixes p = do
   isD <- doesDirectoryExist p
-  isSymLink <- isSymbolicLink p
+  isSymLink <- pathIsSymbolicLink p
   case isD of
     False -> return $ if matchingSuffix then [p] else []
     True ->
