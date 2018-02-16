@@ -17,7 +17,8 @@ import Tags
     ( FileData(..),
       FoundThing(..),
       FoundThingType(FTConsAccessor, FTFuncTypeDef, FTClass, FTType,
-                     FTCons, FTNewtype, FTData, FTDataGADT, FTModule, FTFuncImpl),
+                     FTCons, FTNewtype, FTData, FTDataGADT, FTModule, FTFuncImpl,
+                     FTFileName),
       Pos(..),
       FileName,
       mywords,
@@ -46,7 +47,7 @@ import System.Directory
 import Text.JSON.Generic ( encodeJSON, decodeJSON )
 import Control.Monad ( when )
 import DebugShow ( trace_ )
-import System.FilePath ( (</>) )
+import System.FilePath ( (</>), takeFileName )
 
 -- search for definitions of things
 -- we do this by looking for the following patterns:
